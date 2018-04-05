@@ -1,0 +1,7 @@
+- - -
+-   hosts: all
+    tasks:
+      - name: copy file to destination server
+        copy: scr=/files/ginger.sh dest=/tmp/ owner=root group=root mode=755
+      - name: execute the script
+        command: bash /tmp/ginger.sh
