@@ -1,5 +1,5 @@
 - - -
--   hosts: all
+-   hosts: web
     tasks:
       - name: copy file to destination server
         copy: scr=/files/ginger.sh dest=/tmp/ owner=root group=root mode=755
