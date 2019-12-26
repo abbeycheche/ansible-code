@@ -1,7 +1,7 @@
 - - -
 -   hosts: web
     tasks:
-      - name: copy file to destination server
+      - name: copy file to destination server on linux
         copy: scr=files/ginger.sh dest=/tmp/ owner=root group=root mode=777
       - name: execute the script
         command: bash /tmp/ginger.sh
