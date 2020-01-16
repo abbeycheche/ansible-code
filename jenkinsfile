@@ -1,28 +1,35 @@
+
 pipeline {
-    agent {
-        docker {
-            image 'nginx'
-            args '-p 80:80'
-        }
+  
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        script {
+		'git clone https://abbeyowokoya@bitbucket.org/devsecopsnpss/npss-project.git'
+      }
     }
-    environment { 
-        CI = 'true'
+    stage('Install Maven Dependencies') {
+      steps{
+        script {
+          mvn dependency:purge-local-repository
+        }
+      }
     }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'npm install'
-            }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
         }
-        stage('Test') {
-            steps {
-                sh '/home/ansible/test.sh'
-            }
-        }
-        stage('Deliverr') { 
-            steps {
-                sh '/home/ansible/deliver.sh'     
-            }
-        }
+      }
     }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
+  }
+ }
 }
