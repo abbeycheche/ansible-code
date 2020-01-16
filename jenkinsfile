@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        docker {
+            image 'ngix'
+            args '-p 80:80'
+        }
+    }
+    environment { 
+        CI = 'true'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '/home/ansible/test.sh'
+            }
+        }
+        stage('Deliver') { 
+            steps {
+                sh '/home/ansible/deliver.sh'     
+            }
+        }
+    }
+}
