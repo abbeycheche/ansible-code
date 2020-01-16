@@ -19,7 +19,7 @@ pipeline {
                 sh '/home/ansible/test.sh'
             }
         }
-        stage('Deliver') { 
+        stage('Deliverr') { 
             steps {
                 sh '/home/ansible/deliver.sh'     
             }
