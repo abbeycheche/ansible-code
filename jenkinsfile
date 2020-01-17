@@ -1,35 +1,22 @@
 
 pipeline {
   
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        script {
-		'git clone https://abbeyowokoya@bitbucket.org/devsecopsnpss/npss-project.git'
-      }
-    }
-    stage('Install Maven Dependencies') {
-      steps{
-        script {
-          mvn dependency:purge-local-repository
+  stage('npm-build') {
+    agent {
+        docker {
+            image 'node:7.4'
         }
-      }
     }
-    stage('Deploy Image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
+withNPM(npmrcConfig: 'my-custom-nprc') {
+    sh 'npm install'
+}
+    steps {
+        echo "Branch is ${env.BRANCH_NAME}..."
+
+        withNPM(npmrcConfig:'my-custom-npmrc') {
+            echo "Performing npm build..."
+            sh 'npm install'
         }
-      }
     }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-  }
- }
+}
 }
