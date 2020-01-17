@@ -7,16 +7,23 @@ pipeline {
         git 'https://github.com/abbeycheche/ansible-code.git'
       }
     }
-        
-    stage('Install dependencies') {
+    
+    stage('Add NodeSource yum repository ') {
       steps {
-        sh "dnf install 'dnf-command(npm)'"
+        sh "curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -"
+      }
+    }
+        
+    stage('Install Nodejs') {
+      steps {
+        sh "sudo yum install nodejs"
       }
     }
      
-    stage('Test') {
+    stage('Verify the Node.js and npm Installation') {
       steps {
-         sh 'npm test'
+         sh 'node --version'
+         sh 'npm --version'
       }
     }      
   }
