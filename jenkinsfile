@@ -10,7 +10,7 @@ pipeline {
         
     stage('Install dependencies') {
       steps {
-        sh 'yum npm install -y'
+        sh "dnf install 'dnf-command(npm)'"
       }
     }
      
