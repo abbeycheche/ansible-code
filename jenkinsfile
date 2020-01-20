@@ -8,22 +8,22 @@ pipeline {
       }
     }
     
-    stage('Add NodeSource yum repository ') {
+    stage('Docker Build') {
       steps {
-        sh "curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -"
+        sh "docker.build('npss-reg')"
       }
     }
         
-    stage('Install Nodejs') {
+    stage('Docker Push') 
+           docker.withRegistry ('031127634426.dkr.ecr.us-east-1.amazonaws.com/npss-reg') {
       steps {
-        sh "sudo yum install nodejs"
+        sh docker.image('npss-reg').push('latest')
       }
     }
      
-    stage('Verify the Node.js and npm Installation') {
+    stage('done') {
       steps {
-         sh 'node --version'
-         sh 'npm --version'
+         sh 'echo done'
       }
     }      
   }
